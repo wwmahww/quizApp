@@ -1,23 +1,25 @@
-const path = require('path')
-const express = require('express')
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const app = require('./app');
 
-const app = express()
+dotenv.config({ path: './config.env' });
 
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
 
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('database connect successfuly'));
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => {
-    res.status(200).render('index',{
-        title: 'quizApp'
-    })
-})
-
-
-
-const port = 3000
+//  START SERVER
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`app is running on port ${port}`)
-})
+  console.log(`app is running on port ${port}`);
+});
