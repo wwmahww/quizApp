@@ -1,0 +1,18 @@
+.error_title {
+  color: red;
+  margin-bottom: 40px;
+}
+
+.error_msg {
+  color: black;
+  font-size: medium;
+}
+
+.error {
+  padding-top: 300px;
+  min-height: 84vh;
+}
+
+.main {
+  background-color: rgb(240, 196, 196);
+}

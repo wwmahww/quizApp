@@ -1,18 +1,32 @@
 nav#mainNav.navbar.navbar-expand-lg.navbar-light.fixed-top.py-3
   .container
     //- #navbarResponsive
-    a.navbar-brand.js-scroll-trigger(href='/') Quiz
-    a.nav-link.js-scroll-trigger(href='/sginin') Sgin In
-    a.nav-link.js-scroll-trigger(href='/') Sgin Un
-    button.navbar-toggler.navbar-toggler-right(type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
-      span.navbar-toggler-icon
-    #navbarResponsive.collapse.navbar-collapse
-      ul.navbar-nav.ml-auto.my-2.my-lg-0
-        li.nav-item
-          a.nav-link.js-scroll-trigger(href='#about') About
-        li.nav-item
-          a.nav-link.js-scroll-trigger(href='#services') Services
-        li.nav-item
-          a.nav-link.js-scroll-trigger(href='#portfolio') Portfolio
-        li.nav-item
-          a.nav-link.js-scroll-trigger(href='#contact') Contact
+    if user
+      a.navbar-brand.js-scroll-trigger(href='/') Quiz
+      a.nav-link.js-scroll-trigger.logout-btn(href='#') Log Out
+      a.nav-link.js-scroll-trigger(href='/me')= user.name
+      button.navbar-toggler.navbar-toggler-right(type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarResponsive.collapse.navbar-collapse
+        ul.navbar-nav.ml-auto.my-2.my-lg-0
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='/#') my quizes
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='#portfolio') Portfolio
+
+    else  
+      a.navbar-brand.js-scroll-trigger(href='/') Quiz
+      a.nav-link.js-scroll-trigger(href='/signin') Sgin In
+      a.nav-link.js-scroll-trigger(href='/signup') Sgin Up
+      button.navbar-toggler.navbar-toggler-right(type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarResponsive.collapse.navbar-collapse
+        ul.navbar-nav.ml-auto.my-2.my-lg-0
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='#about') About
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='/myprofile') Services
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='#portfolio') Portfolio
+          li.nav-item
+            a.nav-link.js-scroll-trigger(href='#contact') Contact

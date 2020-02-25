@@ -1,0 +1,15 @@
+.error_title {
+  color: -webkit-linear-gradient(left, #df5d29, #d43418, #ce0909);
+}
+
+.error_msg {
+  color: black;
+  font-size: medium;
+}
+
+.error {
+  padding-top: 100px;
+}
+
+
+/*# sourceMappingURL=/bundle.css.map */

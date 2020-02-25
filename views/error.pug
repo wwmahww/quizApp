@@ -1,0 +1,12 @@
+extend base
+
+block content
+  main.main
+    .error.text-center
+      .error_title
+        h2.heading-second.heading-error there is something wrong
+      .error_msg= msg
+
+
+block head
+  link(href='css/personal.css' rel='stylesheet' type='text/css')

@@ -1,84 +1,55 @@
 const User = require('./../models/userModel');
-const APIFeatures = require('./../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+const factory = require('./handlerFactory');
 
-exports.getAllUsers = async (req, res) => {
-  try {
-    // EXECUTE QUERY
-    const feature = new APIFeatures(User.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const users = await feature.query;
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        message: '',
-        result: users.length,
-        users
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
 };
 
-exports.createUser = async (req, res) => {
-  try {
-    const newUser = await User.create(req.body);
-    res.status(200).json({
-      status: 'success',
-      data: {
-        message: '',
-        user: newUser
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+exports.updateMe = catchAsync(async (req, res, next) => {
+  if (req.body.password || req.body.passwordConfirm)
+    return next(
+      new AppError(
+        'changing password is not allowed from this route. Please try /updateMyPassword',
+        400
+      )
+    );
 
-exports.deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
+  const filteredBody = filterObj(req.body, 'name', 'email');
+  const updatedUser = await User.findByIdAndUpdate(
+    { id: req.user.id },
+    filteredBody,
+    { new: true, runValidators: true }
+  );
 
-    res.status(204).json({
-      status: 'success'
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    user: updatedUser
+  });
+});
 
-exports.updateUser = async (req, res) => {
-  console.log('request came!');
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        message: '',
-        user
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+  if (!user.correctPassword(req.body.password, user.password))
+    return next(
+      new AppError('password is not correct. Please try again.', 401)
+    );
+
+  user.active = false;
+  user.save({ validateBeforeSave: false });
+
+  res.status(204).json({
+    status: 'success'
+  });
+});
+
+exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
+exports.deleteUser = factory.deleteOne(User);
+exports.updateUser = factory.updateOne(User);

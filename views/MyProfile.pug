@@ -1,0 +1,19 @@
+extends admin_base
+
+block content
+  .card.shadow.mb-4
+    .card-header.py-3
+      h6.m-0.font-weight-bold.text-primary Illustrations
+    .card-body
+      .text-center
+        img.rounded-circle.img-fluid.px-3.px-sm-4.mt-3.mb-4(style='width: 10rem; height: 10rem' src='img/pickle-Rick.jpg' alt='')
+      .col-lg-7
+        .p-5
+          .user
+            h4.small.font-weight-bold name:
+              .form-group
+                input.form-control.bg-light.border-0.small(type='text' placeholder=`${user.name}` aria-describedby='basic-addon2' disabled)
+            h4.small.font-weight-bold email:
+              .form-group
+                input.form-control.bg-light.border-0.small(type='text' placeholder=`${user.email}` aria-describedby='basic-addon2' disabled)
+            button.btn.btn-primary change
